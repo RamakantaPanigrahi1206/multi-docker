@@ -1,0 +1,23 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build 0t rpanigrahi/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run rpanigrahi/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t rpanigrahi/multi-client ./client
+  - docker build -t rpanigrahi/multi-nginx ./nginx
+  - docker build -t rpanigrahi/multi-server ./server
+  - docker build -t rpanigrahi/multi-worker ./worker
+
+  ## Login to docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  ## take those imapges and push to git hib
+  - docker push rpanigrahi/multi-client
+  - docker push rpanigrahi/multi-nginx
+  - docker push rpanigrahi/multi-server
+  - docker push rpanigrahi/multi-worker
