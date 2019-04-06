@@ -1,6 +1,6 @@
 {
   "AWSEBDockerrunVersion": 2,
-  "containerDefination": [
+  "containerDefinitions": [
   {
     "name": "client",
     "image": "rpanigrahi/multi-client",
